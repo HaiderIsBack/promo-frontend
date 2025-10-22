@@ -195,10 +195,10 @@ if ($result['success']) {
               <div class="col-xl-6">
                 <div class="category-card cat-kids" data-aos="fade-up" data-aos-delay="400">
                   <div class="category-image">
-                    <img src="assets/img/product/product-8.webp" alt="Kid's Fashion" class="img-fluid">
+                    <img src="https://practice-php.page.gd/wp-content/uploads/2025/10/VGWebsiteThumbnailsSwitch2-ezgif.com-webp-to-jpg-converter.jpg" alt="Kid's Fashion" class="img-fluid">
                   </div>
                   <div class="category-content">
-                    <h4>Kid's Fashion</h4>
+                    <h4>Consoles</h4>
                     <p>185 products</p>
                     <a href="#" class="card-link">Shop Now <i class="bi bi-arrow-right"></i></a>
                   </div>

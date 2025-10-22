@@ -2,6 +2,11 @@
 
 require_once "./global.php";
 
+if (isset($_SESSION['token'])) {
+  header('Location: '. SITE_URL . '/index.php');
+  die();
+}
+
 if (isset($_POST['login-submit'])) {
   $username = $_POST['username'];
   $password = $_POST['password'];
