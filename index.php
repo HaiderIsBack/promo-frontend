@@ -121,8 +121,8 @@ if ($result['success']) {
               <div class="product-info">
                 <h4><?php echo $products[0]['name']; ?></h4>
                 <div class="price">
-                  <span class="sale-price">Rs.<?php echo $products[0]['sale_price']; ?></span>
-                  <span class="original-price">Rs.<?php echo $products[0]['regular_price']; ?></span>
+                  <span class="sale-price"><?php echo $products[0]['sale_price'] !== '' ? "Rs." . $products[0]['sale_price'] : "Rs." . $products[0]['price']; ?></span>
+                  <span class="original-price"><?php echo $products[0]['sale_price'] !== '' ? "Rs." . $products[0]['regular_price'] : '' ?></span>
                 </div>
               </div>
             </div>

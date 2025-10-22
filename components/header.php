@@ -120,7 +120,7 @@
                     <span>Settings</span>
                   </a>
                 </div>
-                <?php if (! isset($_SESSION['user_id'])) : ?>
+                <?php if (! isset($_SESSION['token'])) : ?>
                 <div class="dropdown-footer">
                   <a href="login.php" class="btn btn-primary w-100 mb-2">Login In</a>
                   <a href="register.php" class="btn btn-outline-primary w-100">Register</a>

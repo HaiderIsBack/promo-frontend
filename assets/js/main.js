@@ -6,6 +6,8 @@
 * License: https://bootstrapmade.com/license/
 */
 
+let prevScrollY = window.scrollY;
+
 (function() {
   "use strict";
 
@@ -13,10 +15,19 @@
    * Apply .scrolled class to the body as the page is scrolled down
    */
   function toggleScrolled() {
+    let currScrollY = window.scrollY;
+
     const selectBody = document.querySelector('body');
     const selectHeader = document.querySelector('#header');
     if (!selectHeader.classList.contains('scroll-up-sticky') && !selectHeader.classList.contains('sticky-top') && !selectHeader.classList.contains('fixed-top')) return;
     window.scrollY > 100 ? selectBody.classList.add('scrolled') : selectBody.classList.remove('scrolled');
+
+    if (currScrollY > prevScrollY && currScrollY > 100) {
+      selectHeader.style.transform = "translateY(-100%)";
+    } else {
+      selectHeader.style.transform = "translateY(0%)";
+    }
+    prevScrollY = currScrollY;
   }
 
   document.addEventListener('scroll', toggleScrolled);

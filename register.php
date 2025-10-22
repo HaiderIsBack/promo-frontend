@@ -27,7 +27,7 @@ if (isset($_POST['register-submit'])) {
 
             if ($user_id) {
               $_SESSION['toast'] = json_encode(['type' => 'success', 'message' => 'You have successfully created your account. Login to proceed further!']);
-              header("Location: $SITE_URL/login.php");
+              header("Location: " . SITE_URL . "/login.php");
               die();
             }
         }
