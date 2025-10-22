@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 class Woo_Fetch {
     private $store;
     private $ck;
@@ -16,7 +18,7 @@ class Woo_Fetch {
 
         curl_setopt($this->ch, CURLOPT_TIMEOUT, 30);
         
-        curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);  // Or false if self-signed
+        curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, true);  // Or false if self-signed
     }
 
     function request($method, $endpoint, $params = [], $body = null) {
@@ -67,9 +69,11 @@ class Woo_Fetch {
 }
 
 // WooCommerce store URL (no trailing slash)
-$store_url = "https://practice-php.page.gd";
+const STORE_URL = "https://practice-php.page.gd";
 
 // REST API credentials
-$consumer_key = "ck_cdf73c66628cad7706d9cc63c9c1e94321972f42";
-$consumer_secret = "cs_47352918dcdc3dae091c00fcab0c35bedbb387e2";
+const CONSUMER_KEY = "ck_cdf73c66628cad7706d9cc63c9c1e94321972f42";
+const CONSUMER_SECRET = "cs_47352918dcdc3dae091c00fcab0c35bedbb387e2";
 
+const SITE_URL = '/php_lab'; // for Development
+// $SITE_URL = ''; // for Live
