@@ -1,0 +1,8 @@
+.out-of-stock {
+  background: linear-gradient(135deg, color-mix(in srgb, crimson, transparent 90%), color-mix(in srgb, crimson, transparent 95%)) !important; 
+  border-color: crimson !important;
+}
+
+.out-of-stock i {
+  color: crimson !important;
+}

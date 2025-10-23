@@ -77,3 +77,38 @@ const CONSUMER_SECRET = "cs_47352918dcdc3dae091c00fcab0c35bedbb387e2";
 
 const SITE_URL = '/php_lab'; // for Development
 // $SITE_URL = ''; // for Live
+
+function verify_user_token() {
+    if (empty($_SESSION['token'])) {
+        return false;
+    }
+    
+    $token = $_SESSION['token'];
+    $url = STORE_URL . '/wp-json/jwt-auth/v1/token/validate';
+
+    $options = array(
+        'http' => array(
+            'header' => "Content-type: application/json\r\n" .
+                    "Authorization: Bearer $token\r\n",
+            'method' => 'POST',
+            'content' => '{}'
+        )
+    );
+
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+
+    if ($result === false) {
+        unset($_SESSION['token']);
+        return false;
+    }
+
+    $result = json_decode($result, true);
+    
+    if (isset($result['code']) && $result['code'] === "jwt_auth_valid_token") {
+        return true;
+    }
+
+    unset($_SESSION['token']);
+    return false;
+}

@@ -1,0 +1,755 @@
+<?php
+
+require_once "./global.php";
+
+if (! isset($_GET['id'])) {
+  header('Location: '. SITE_URL .'/index.php');
+  die();
+}
+
+$fetch = new Woo_Fetch(STORE_URL, CONSUMER_KEY, CONSUMER_SECRET);
+
+$result = $fetch->request("GET", "/wp-json/wc/v3/products/" . $_GET['id'] );
+
+$product = null;
+
+if (isset($result['status']) && $result['status']) {
+  $product = json_decode($result['response'], true);
+}
+
+if (is_null($product)) {
+  header('Location: '. SITE_URL .'/404.html');
+  die();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Product Details - NiceShop Bootstrap Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/drift-zoom/drift-basic.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/custom.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceShop
+  * Template URL: https://bootstrapmade.com/niceshop-bootstrap-ecommerce-template/
+  * Updated: Aug 26 2025 with Bootstrap v5.3.7
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="product-details-page">
+
+  <?php require_once "./components/header.php" ?>
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Product Details</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.php">Home</a></li>
+            <li class="current">Product Details</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Product Details Section -->
+    <section id="product-details" class="product-details section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row g-4">
+          <!-- Product Gallery -->
+          <div class="col-lg-7" data-aos="zoom-in" data-aos-delay="150">
+            <div class="product-gallery">
+              <div class="main-showcase">
+                <div class="image-zoom-container">
+                  <img src="<?php echo $product['images'][0]['src']; ?>" alt="Product Main" class="img-fluid main-product-image drift-zoom" id="main-product-image" data-zoom="assets/img/product/product-details-6.webp">
+
+                  <div class="image-navigation">
+                    <button class="nav-arrow prev-image image-nav-btn prev-image" type="button">
+                      <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="nav-arrow next-image image-nav-btn next-image" type="button">
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="thumbnail-grid">
+                <div class="thumbnail-wrapper thumbnail-item active" data-image="assets/img/product/product-details-6.webp">
+                  <img src="assets/img/product/product-details-6.webp" alt="View 1" class="img-fluid">
+                </div>
+                <div class="thumbnail-wrapper thumbnail-item" data-image="assets/img/product/product-details-7.webp">
+                  <img src="assets/img/product/product-details-7.webp" alt="View 2" class="img-fluid">
+                </div>
+                <div class="thumbnail-wrapper thumbnail-item" data-image="assets/img/product/product-details-8.webp">
+                  <img src="assets/img/product/product-details-8.webp" alt="View 3" class="img-fluid">
+                </div>
+                <div class="thumbnail-wrapper thumbnail-item" data-image="assets/img/product/product-details-4.webp">
+                  <img src="assets/img/product/product-details-4.webp" alt="View 4" class="img-fluid">
+                </div>
+                <div class="thumbnail-wrapper thumbnail-item" data-image="assets/img/product/product-details-5.webp">
+                  <img src="assets/img/product/product-details-5.webp" alt="View 5" class="img-fluid">
+                </div>
+                <div class="thumbnail-wrapper thumbnail-item" data-image="assets/img/product/product-details-3.webp">
+                  <img src="assets/img/product/product-details-3.webp" alt="View 6" class="img-fluid">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Details -->
+          <div class="col-lg-5" data-aos="fade-left" data-aos-delay="200">
+            <div class="product-details">
+              <div class="product-badge-container">
+                <span class="badge-category"><?php echo $product['categories'][0]['name']; ?></span>
+                <div class="rating-group">
+                  <div class="stars">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-half"></i>
+                  </div>
+                  <span class="review-text">(127 reviews)</span>
+                </div>
+              </div>
+
+              <h1 class="product-name"><?php echo $product['name']; ?></h1>
+
+              <div class="pricing-section">
+                <div class="price-display">
+                  <span class="sale-price"><?php echo $product['sale_price'] ? 'Rs.' . $product['sale_price'] : 'Rs.' . $product['price']; ?></span>
+                  <span class="regular-price"><?php $product['sale_price'] ? 'Rs.' . $product['regular_price'] : ''; ?></span>
+                </div>
+
+                <?php if ($product['sale_price']) : ?>
+                <div class="savings-info">
+                  <span class="save-amount">Save $50.00</span>
+                  <span class="discount-percent">(21% off)</span>
+                </div>
+                <?php endif; ?>
+              </div>
+
+              <div class="product-description">
+                <p><?php echo $product['short_description'] ?></p>
+              </div>
+
+              <?php if ($product['stock_status'] === 'instock') { ?>
+              <div class="availability-status">
+                <div class="stock-indicator">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span class="stock-text"><?php echo $product['stock_status'] === 'instock' ? 'Available' : 'Out of Stock'; ?></span>
+                </div>
+                <?php if ($product['stock_quantity'] && $product['stock_quantity'] < 20) : ?>
+                  <div class="quantity-left">Only <?php echo $product['stock_quantity']; ?> items remaining</div>
+                <?php endif; ?>
+              </div>
+              <?php } else { ?>
+                <div class="availability-status out-of-stock">
+                  <div class="stock-indicator">
+                    <i class="bi bi-x-circle-fill"></i>
+                    <span class="stock-text"><?php echo $product['stock_status'] === 'instock' ? 'Available' : 'Out of Stock'; ?></span>
+                  </div>
+                </div>
+              <?php } ?>
+
+              <!-- Product Variants -->
+              <!-- <div class="variant-section">
+                <div class="color-selection">
+                  <label class="variant-label">Available Colors:</label>
+                  <div class="color-grid">
+                    <div class="color-chip active" data-color="Midnight Black" style="background: linear-gradient(135deg, #1a1a1a, #000);">
+                      <span class="selection-check"><i class="bi bi-check"></i></span>
+                    </div>
+                    <div class="color-chip" data-color="Pearl White" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
+                      <span class="selection-check"><i class="bi bi-check"></i></span>
+                    </div>
+                    <div class="color-chip" data-color="Ocean Blue" style="background: linear-gradient(135deg, #0066cc, #004499);">
+                      <span class="selection-check"><i class="bi bi-check"></i></span>
+                    </div>
+                    <div class="color-chip" data-color="Forest Green" style="background: linear-gradient(135deg, #28a745, #155724);">
+                      <span class="selection-check"><i class="bi bi-check"></i></span>
+                    </div>
+                  </div>
+                  <div class="selected-variant">Selected: <span>Midnight Black</span></div>
+                </div>
+              </div> -->
+
+              <?php if ($product['stock_status'] === 'instock') : ?>
+              <!-- Purchase Options -->
+              <div class="purchase-section">
+                <div class="quantity-control">
+                  <label class="control-label">Quantity:</label>
+                  <div class="quantity-input-group">
+                    <div class="quantity-selector">
+                      <button class="quantity-btn decrease" type="button">
+                        <i class="bi bi-dash"></i>
+                      </button>
+                      <input type="number" class="quantity-input" value="1" min="1" max="18">
+                      <button class="quantity-btn increase" type="button">
+                        <i class="bi bi-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="action-buttons">
+                  <button class="btn primary-action">
+                    <i class="bi bi-bag-plus"></i>
+                    Add to Cart
+                  </button>
+                  <button class="btn secondary-action">
+                    <i class="bi bi-lightning"></i>
+                    Buy Now
+                  </button>
+                  <button class="btn icon-action" title="Add to Wishlist">
+                    <i class="bi bi-heart"></i>
+                  </button>
+                </div>
+              </div>
+              <?php endif; ?>
+
+              <!-- Benefits List -->
+              <div class="benefits-list">
+                <div class="benefit-item">
+                  <i class="bi bi-truck"></i>
+                  <span>Free delivery on orders over $75</span>
+                </div>
+                <div class="benefit-item">
+                  <i class="bi bi-arrow-clockwise"></i>
+                  <span>45-day hassle-free returns</span>
+                </div>
+                <div class="benefit-item">
+                  <i class="bi bi-shield-check"></i>
+                  <span>3-year manufacturer warranty</span>
+                </div>
+                <div class="benefit-item">
+                  <i class="bi bi-headset"></i>
+                  <span>24/7 customer support available</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Information Tabs -->
+        <div class="row mt-5" data-aos="fade-up" data-aos-delay="300">
+          <div class="col-12">
+            <div class="info-tabs-container">
+              <nav class="tabs-navigation nav">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ecommerce-product-details-5-overview" type="button">Overview</button>
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ecommerce-product-details-5-technical" type="button">Technical Details</button>
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ecommerce-product-details-5-customer-reviews" type="button">Reviews (127)</button>
+              </nav>
+
+              <div class="tab-content">
+                <!-- Overview Tab -->
+                <div class="tab-pane fade show active" id="ecommerce-product-details-5-overview">
+                  <div class="overview-content">
+                    <div class="row g-4">
+                      <div class="col-lg-8">
+                        <div class="content-section">
+                          <h3>Product Overview</h3>
+                          <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+
+                          <h4>Key Highlights</h4>
+                          <div class="highlights-grid">
+                            <div class="highlight-card">
+                              <i class="bi bi-volume-up"></i>
+                              <h5>Superior Audio</h5>
+                              <p>Ut enim ad minima veniam quis nostrum exercitationem</p>
+                            </div>
+                            <div class="highlight-card">
+                              <i class="bi bi-battery-charging"></i>
+                              <h5>Long Battery</h5>
+                              <p>Excepteur sint occaecat cupidatat non proident</p>
+                            </div>
+                            <div class="highlight-card">
+                              <i class="bi bi-wifi"></i>
+                              <h5>Wireless Tech</h5>
+                              <p>Duis aute irure dolor in reprehenderit in voluptate</p>
+                            </div>
+                            <div class="highlight-card">
+                              <i class="bi bi-person-check"></i>
+                              <h5>Comfort Fit</h5>
+                              <p>Lorem ipsum dolor sit amet consectetur adipiscing</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-4">
+                        <div class="package-contents">
+                          <h4>Package Contents</h4>
+                          <ul class="contents-list">
+                            <li><i class="bi bi-check-circle"></i>Premium Audio Device</li>
+                            <li><i class="bi bi-check-circle"></i>Premium Carrying Case</li>
+                            <li><i class="bi bi-check-circle"></i>USB-C Fast Charging Cable</li>
+                            <li><i class="bi bi-check-circle"></i>3.5mm Audio Connector</li>
+                            <li><i class="bi bi-check-circle"></i>Quick Start Guide</li>
+                            <li><i class="bi bi-check-circle"></i>Warranty Documentation</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Technical Details Tab -->
+                <div class="tab-pane fade" id="ecommerce-product-details-5-technical">
+                  <div class="technical-content">
+                    <div class="row g-4">
+                      <div class="col-md-6">
+                        <div class="tech-group">
+                          <h4>Audio Specifications</h4>
+                          <div class="spec-table">
+                            <div class="spec-row">
+                              <span class="spec-name">Frequency Range</span>
+                              <span class="spec-value">15Hz - 25kHz</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Driver Diameter</span>
+                              <span class="spec-value">50mm Dynamic</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Sensitivity</span>
+                              <span class="spec-value">98dB SPL</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Impedance</span>
+                              <span class="spec-value">24 Ohm</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">THD</span>
+                              <span class="spec-value">&lt; 0.5%</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="tech-group">
+                          <h4>Connectivity &amp; Power</h4>
+                          <div class="spec-table">
+                            <div class="spec-row">
+                              <span class="spec-name">Wireless Protocol</span>
+                              <span class="spec-value">Bluetooth 5.3</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Range</span>
+                              <span class="spec-value">Up to 30ft (10m)</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Battery Capacity</span>
+                              <span class="spec-value">800mAh Li-ion</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Usage Time</span>
+                              <span class="spec-value">35+ hours</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Charge Time</span>
+                              <span class="spec-value">2.5 hours</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="tech-group">
+                          <h4>Physical Dimensions</h4>
+                          <div class="spec-table">
+                            <div class="spec-row">
+                              <span class="spec-name">Weight</span>
+                              <span class="spec-value">285g</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Dimensions</span>
+                              <span class="spec-value">190 x 165 x 82mm</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Ear Cup Material</span>
+                              <span class="spec-value">Memory Foam</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Headband</span>
+                              <span class="spec-value">Adjustable Steel</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="tech-group">
+                          <h4>Advanced Features</h4>
+                          <div class="spec-table">
+                            <div class="spec-row">
+                              <span class="spec-name">Noise Cancellation</span>
+                              <span class="spec-value">Hybrid ANC</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Voice Assistant</span>
+                              <span class="spec-value">Siri &amp; Google</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Microphone Type</span>
+                              <span class="spec-value">Dual Array</span>
+                            </div>
+                            <div class="spec-row">
+                              <span class="spec-name">Water Rating</span>
+                              <span class="spec-value">IPX5</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Reviews Tab -->
+                <div class="tab-pane fade" id="ecommerce-product-details-5-customer-reviews">
+                  <div class="reviews-content">
+                    <div class="reviews-header">
+                      <div class="rating-overview">
+                        <div class="average-score">
+                          <div class="score-display">4.6</div>
+                          <div class="score-stars">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                          </div>
+                          <div class="total-reviews">127 customer reviews</div>
+                        </div>
+
+                        <div class="rating-distribution">
+                          <div class="rating-row">
+                            <span class="stars-label">5★</span>
+                            <div class="progress-container">
+                              <div class="progress-fill" style="width: 68%;"></div>
+                            </div>
+                            <span class="count-label">86</span>
+                          </div>
+                          <div class="rating-row">
+                            <span class="stars-label">4★</span>
+                            <div class="progress-container">
+                              <div class="progress-fill" style="width: 22%;"></div>
+                            </div>
+                            <span class="count-label">28</span>
+                          </div>
+                          <div class="rating-row">
+                            <span class="stars-label">3★</span>
+                            <div class="progress-container">
+                              <div class="progress-fill" style="width: 6%;"></div>
+                            </div>
+                            <span class="count-label">8</span>
+                          </div>
+                          <div class="rating-row">
+                            <span class="stars-label">2★</span>
+                            <div class="progress-container">
+                              <div class="progress-fill" style="width: 3%;"></div>
+                            </div>
+                            <span class="count-label">4</span>
+                          </div>
+                          <div class="rating-row">
+                            <span class="stars-label">1★</span>
+                            <div class="progress-container">
+                              <div class="progress-fill" style="width: 1%;"></div>
+                            </div>
+                            <span class="count-label">1</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="write-review-cta">
+                        <h4>Share Your Experience</h4>
+                        <p>Help others make informed decisions</p>
+                        <button class="btn review-btn">Write Review</button>
+                      </div>
+                    </div>
+
+                    <div class="customer-reviews-list">
+                      <div class="review-card">
+                        <div class="reviewer-profile">
+                          <img src="assets/img/person/person-f-3.webp" alt="Customer" class="profile-pic">
+                          <div class="profile-details">
+                            <div class="customer-name">Sarah Martinez</div>
+                            <div class="review-meta">
+                              <div class="review-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                              </div>
+                              <span class="review-date">March 28, 2024</span>
+                            </div>
+                          </div>
+                        </div>
+                        <h5 class="review-headline">Outstanding audio quality and comfort</h5>
+                        <div class="review-text">
+                          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam. Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                        </div>
+                        <div class="review-actions">
+                          <button class="action-btn"><i class="bi bi-hand-thumbs-up"></i> Helpful (12)</button>
+                          <button class="action-btn"><i class="bi bi-chat-dots"></i> Reply</button>
+                        </div>
+                      </div>
+
+                      <div class="review-card">
+                        <div class="reviewer-profile">
+                          <img src="assets/img/person/person-m-5.webp" alt="Customer" class="profile-pic">
+                          <div class="profile-details">
+                            <div class="customer-name">David Chen</div>
+                            <div class="review-meta">
+                              <div class="review-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star"></i>
+                              </div>
+                              <span class="review-date">March 15, 2024</span>
+                            </div>
+                          </div>
+                        </div>
+                        <h5 class="review-headline">Great value, minor connectivity issues</h5>
+                        <div class="review-text">
+                          <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Overall satisfied with the purchase.</p>
+                        </div>
+                        <div class="review-actions">
+                          <button class="action-btn"><i class="bi bi-hand-thumbs-up"></i> Helpful (8)</button>
+                          <button class="action-btn"><i class="bi bi-chat-dots"></i> Reply</button>
+                        </div>
+                      </div>
+
+                      <div class="review-card">
+                        <div class="reviewer-profile">
+                          <img src="assets/img/person/person-f-7.webp" alt="Customer" class="profile-pic">
+                          <div class="profile-details">
+                            <div class="customer-name">Emily Rodriguez</div>
+                            <div class="review-meta">
+                              <div class="review-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                              </div>
+                              <span class="review-date">February 22, 2024</span>
+                            </div>
+                          </div>
+                        </div>
+                        <h5 class="review-headline">Perfect for work-from-home setup</h5>
+                        <div class="review-text">
+                          <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+                        </div>
+                        <div class="review-actions">
+                          <button class="action-btn"><i class="bi bi-hand-thumbs-up"></i> Helpful (15)</button>
+                          <button class="action-btn"><i class="bi bi-chat-dots"></i> Reply</button>
+                        </div>
+                      </div>
+
+                      <div class="load-more-section">
+                        <button class="btn load-more-reviews">Show More Reviews</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- /Product Details Section -->
+
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+    <div class="footer-main">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-4 col-md-6">
+            <div class="footer-widget footer-about">
+              <a href="index.html" class="logo">
+                <span class="sitename">NiceShop</span>
+              </a>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in nibh vehicula, facilisis magna ut, consectetur lorem. Proin eget tortor risus.</p>
+
+              <div class="social-links mt-4">
+                <h5>Connect With Us</h5>
+                <div class="social-icons">
+                  <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                  <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                  <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                  <a href="#" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+                  <a href="#" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
+                  <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 col-sm-6">
+            <div class="footer-widget">
+              <h4>Shop</h4>
+              <ul class="footer-links">
+                <li><a href="category.html">New Arrivals</a></li>
+                <li><a href="category.html">Bestsellers</a></li>
+                <li><a href="category.html">Women's Clothing</a></li>
+                <li><a href="category.html">Men's Clothing</a></li>
+                <li><a href="category.html">Accessories</a></li>
+                <li><a href="category.html">Sale</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 col-sm-6">
+            <div class="footer-widget">
+              <h4>Support</h4>
+              <ul class="footer-links">
+                <li><a href="support.html">Help Center</a></li>
+                <li><a href="account.html">Order Status</a></li>
+                <li><a href="shiping-info.html">Shipping Info</a></li>
+                <li><a href="return-policy.html">Returns &amp; Exchanges</a></li>
+                <li><a href="#">Size Guide</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="footer-widget">
+              <h4>Contact Information</h4>
+              <div class="footer-contact">
+                <div class="contact-item">
+                  <i class="bi bi-geo-alt"></i>
+                  <span>123 Fashion Street, New York, NY 10001</span>
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-telephone"></i>
+                  <span>+1 (555) 123-4567</span>
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-envelope"></i>
+                  <span>hello@example.com</span>
+                </div>
+                <div class="contact-item">
+                  <i class="bi bi-clock"></i>
+                  <span>Monday-Friday: 9am-6pm<br>Saturday: 10am-4pm<br>Sunday: Closed</span>
+                </div>
+              </div>
+
+              <div class="app-buttons mt-4">
+                <a href="#" class="app-btn">
+                  <i class="bi bi-apple"></i>
+                  <span>App Store</span>
+                </a>
+                <a href="#" class="app-btn">
+                  <i class="bi bi-google-play"></i>
+                  <span>Google Play</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <div class="row gy-3 align-items-center">
+          <div class="col-lg-6 col-md-12">
+            <div class="copyright">
+              <p>© <span>Copyright</span> <strong class="sitename">NiceShop</strong>. All Rights Reserved.</p>
+            </div>
+            <div class="credits mt-1">
+              <!-- All the links in the footer should remain intact. -->
+              <!-- You can delete the links only if you've purchased the pro version. -->
+              <!-- Licensing information: https://bootstrapmade.com/license/ -->
+              <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+              Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-12">
+            <div class="d-flex flex-wrap justify-content-lg-end justify-content-center align-items-center gap-4">
+              <div class="payment-methods">
+                <div class="payment-icons">
+                  <i class="bi bi-credit-card" aria-label="Credit Card"></i>
+                  <i class="bi bi-paypal" aria-label="PayPal"></i>
+                  <i class="bi bi-apple" aria-label="Apple Pay"></i>
+                  <i class="bi bi-google" aria-label="Google Pay"></i>
+                  <i class="bi bi-shop" aria-label="Shop Pay"></i>
+                  <i class="bi bi-cash" aria-label="Cash on Delivery"></i>
+                </div>
+              </div>
+
+              <div class="legal-links">
+                <a href="tos.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="tos.html">Cookies</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/drift-zoom/Drift.min.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

@@ -90,6 +90,10 @@ h6 {
   font-family: var(--heading-font);
 }
 
+.row {
+  --bs-gutter-y: 1.5rem !important;
+}
+
 /* Pulsating Play Button
 ------------------------------*/
 .pulsating-play-btn {

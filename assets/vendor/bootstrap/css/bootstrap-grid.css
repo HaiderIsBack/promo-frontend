@@ -11,7 +11,7 @@
 .container-md,
 .container-sm {
   --bs-gutter-x: 1.5rem;
-  --bs-gutter-y: 0;
+  --bs-gutter-y: 1.5rem;
   width: 100%;
   padding-right: calc(var(--bs-gutter-x) * 0.5);
   padding-left: calc(var(--bs-gutter-x) * 0.5);
@@ -55,7 +55,7 @@
 
 .row {
   --bs-gutter-x: 1.5rem;
-  --bs-gutter-y: 0;
+  --bs-gutter-y: 1.5rem;
   display: flex;
   flex-wrap: wrap;
   margin-top: calc(-1 * var(--bs-gutter-y));
@@ -227,7 +227,7 @@
 
 .g-0,
 .gy-0 {
-  --bs-gutter-y: 0;
+  --bs-gutter-y: 1.5rem;
 }
 
 .g-1,
@@ -406,7 +406,7 @@
   }
   .g-sm-0,
   .gy-sm-0 {
-    --bs-gutter-y: 0;
+    --bs-gutter-y: 1.5rem;
   }
   .g-sm-1,
   .gx-sm-1 {
@@ -575,7 +575,7 @@
   }
   .g-md-0,
   .gy-md-0 {
-    --bs-gutter-y: 0;
+    --bs-gutter-y: 1.5rem;
   }
   .g-md-1,
   .gx-md-1 {
@@ -744,7 +744,7 @@
   }
   .g-lg-0,
   .gy-lg-0 {
-    --bs-gutter-y: 0;
+    --bs-gutter-y: 1.5rem;
   }
   .g-lg-1,
   .gx-lg-1 {
@@ -913,7 +913,7 @@
   }
   .g-xl-0,
   .gy-xl-0 {
-    --bs-gutter-y: 0;
+    --bs-gutter-y: 1.5rem;
   }
   .g-xl-1,
   .gx-xl-1 {
@@ -1082,7 +1082,7 @@
   }
   .g-xxl-0,
   .gy-xxl-0 {
-    --bs-gutter-y: 0;
+    --bs-gutter-y: 1.5rem;
   }
   .g-xxl-1,
   .gx-xxl-1 {

@@ -2,7 +2,7 @@
 
 require_once "./global.php";
 
-if (isset($_SESSION['token'])) {
+if (verify_user_token()) {
   header('Location: '. SITE_URL . '/index.php');
   die();
 }
