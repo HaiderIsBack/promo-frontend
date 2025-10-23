@@ -93,7 +93,7 @@ if (is_null($product)) {
             <div class="product-gallery">
               <div class="main-showcase">
                 <div class="image-zoom-container">
-                  <img src="<?php echo $product['images'][0]['src']; ?>" alt="Product Main" class="img-fluid main-product-image drift-zoom" id="main-product-image" data-zoom="assets/img/product/product-details-6.webp">
+                  <img src="<?php echo $product['images'][0]['src']; ?>" alt="<?php echo $product['images'][0]['alt']; ?>" class="img-fluid main-product-image drift-zoom" id="main-product-image" data-zoom="<?php echo $product['images'][0]['src']; ?>">
 
                   <div class="image-navigation">
                     <button class="nav-arrow prev-image image-nav-btn prev-image" type="button">
@@ -107,8 +107,8 @@ if (is_null($product)) {
               </div>
 
               <div class="thumbnail-grid">
-                <div class="thumbnail-wrapper thumbnail-item active" data-image="assets/img/product/product-details-6.webp">
-                  <img src="assets/img/product/product-details-6.webp" alt="View 1" class="img-fluid">
+                <div class="thumbnail-wrapper thumbnail-item active" data-image="<?php echo $product['images'][0]['src']; ?>">
+                  <img src="<?php echo $product['images'][0]['src']; ?>" alt="<?php echo $product['images'][0]['alt']; ?>" class="img-fluid">
                 </div>
                 <div class="thumbnail-wrapper thumbnail-item" data-image="assets/img/product/product-details-7.webp">
                   <img src="assets/img/product/product-details-7.webp" alt="View 2" class="img-fluid">
@@ -150,16 +150,18 @@ if (is_null($product)) {
 
               <div class="pricing-section">
                 <div class="price-display">
-                  <span class="sale-price"><?php echo $product['sale_price'] ? 'Rs.' . $product['sale_price'] : 'Rs.' . $product['price']; ?></span>
-                  <span class="regular-price"><?php $product['sale_price'] ? 'Rs.' . $product['regular_price'] : ''; ?></span>
+                  <span class="sale-price"><?php echo $product['on_sale'] ? 'Rs.' . number_format($product['sale_price']) : 'Rs.' . number_format($product['price']); ?></span>
+                  <span class="regular-price"><?php echo $product['on_sale'] ? 'Rs.' . number_format($product['regular_price']) : ''; ?></span>
                 </div>
 
-                <?php if ($product['sale_price']) : ?>
+                <?php if ($product['on_sale']) {
+                  $discount = floor((($product['regular_price'] - $product['sale_price']) / $product['regular_price']) * 100);
+                  ?>
                 <div class="savings-info">
-                  <span class="save-amount">Save $50.00</span>
-                  <span class="discount-percent">(21% off)</span>
+                  <span class="save-amount">Save Rs.<?php echo ($product['regular_price'] - $product['sale_price']); ?></span>
+                  <span class="discount-percent">(<?php echo $discount; ?>% off)</span>
                 </div>
-                <?php endif; ?>
+                <?php } ?>
               </div>
 
               <div class="product-description">
@@ -226,7 +228,7 @@ if (is_null($product)) {
                 </div>
 
                 <div class="action-buttons">
-                  <button class="btn primary-action">
+                  <button class="btn primary-action" id="add-to-cart-btn">
                     <i class="bi bi-bag-plus"></i>
                     Add to Cart
                   </button>
@@ -749,6 +751,33 @@ if (is_null($product)) {
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script>
+    const addToCartBtn = document.getElementById("add-to-cart-btn");
+
+    addToCartBtn.addEventListener("click", async () => {
+      const qty = document.querySelector(".quantity-input");
+
+      const response = await fetch("./controllers/add_to_cart.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({productId: <?php echo $product['id']; ?>, quantity: parseInt(qty.value)})
+      });
+
+      const data = await response.json();
+
+      
+      if (data.success) {
+        const cartBadges = document.querySelectorAll('.cart-count-badge');
+
+        cartBadges.forEach(badge => {
+          badge.textContent = data.cartCount;
+        })
+      }
+    });
+  </script>
 
 </body>
 

@@ -130,15 +130,29 @@
             </div>
 
             <!-- Wishlist -->
-            <a href="account.html" class="header-action-btn d-none d-md-block">
+            <a href="account.php" class="header-action-btn d-none d-md-block">
               <i class="bi bi-heart"></i>
               <span class="badge">0</span>
             </a>
 
             <!-- Cart -->
-            <a href="cart.html" class="header-action-btn">
+            <a href="cart.php" class="header-action-btn">
               <i class="bi bi-cart3"></i>
-              <span class="badge">3</span>
+              <span class="badge cart-count-badge">
+                <?php
+                  if (isset($_SESSION['cart'])) {
+                    $cart_items_count = 0;
+                    foreach($_SESSION['cart'] as &$item) {
+                        $cart_items_count += (int) $item['quantity'];
+                    }
+                    unset($item);
+
+                    echo $cart_items_count;
+                  } else {
+                    echo '0';
+                  }
+                ?>
+              </span>
             </a>
 
             <!-- Mobile Navigation Toggle -->

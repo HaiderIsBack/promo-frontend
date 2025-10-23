@@ -121,8 +121,8 @@ if ($result['success']) {
               <div class="product-info">
                 <h4><?php echo $products[0]['name']; ?></h4>
                 <div class="price">
-                  <span class="sale-price"><?php echo $products[0]['sale_price'] !== '' ? "Rs." . $products[0]['sale_price'] : "Rs." . $products[0]['price']; ?></span>
-                  <span class="original-price"><?php echo $products[0]['sale_price'] !== '' ? "Rs." . $products[0]['regular_price'] : '' ?></span>
+                  <span class="sale-price"><?php echo $products[0]['sale_price'] !== '' ? "Rs." . number_format($products[0]['sale_price']) : "Rs." . number_format($products[0]['price']); ?></span>
+                  <span class="original-price"><?php echo $products[0]['sale_price'] !== '' ? "Rs." . number_format($products[0]['regular_price']) : '' ?></span>
                 </div>
               </div>
             </div>
@@ -142,7 +142,21 @@ if ($result['success']) {
           <div class="floating-elements">
             <div class="floating-icon cart" data-aos="fade-up" data-aos-delay="600">
               <i class="bi bi-cart3"></i>
-              <span class="notification-dot">3</span>
+              <span class="notification-dot">
+                <?php
+                  if (isset($_SESSION['cart'])) {
+                    $cart_items_count = 0;
+                    foreach($_SESSION['cart'] as &$item) {
+                        $cart_items_count += (int) $item['quantity'];
+                    }
+                    unset($item);
+
+                    echo $cart_items_count;
+                  } else {
+                    echo '0';
+                  }
+                ?>
+              </span>
             </div>
             <div class="floating-icon wishlist" data-aos="fade-up" data-aos-delay="700">
               <i class="bi bi-heart"></i>
@@ -716,13 +730,17 @@ if ($result['success']) {
                 <div class="product-showcase">
                   <div class="product-image">
                     <img src="<?php echo $product['images'][0]['src']; ?>" alt="Featured Product" class="img-fluid">
-                    <div class="discount-badge">-45%</div>
+                    <?php if ($product['on_sale']) {
+                      $discount = floor((($product['regular_price'] - $product['sale_price']) / $product['regular_price']) * 100);
+                      ?>
+                      <div class="discount-badge">-<?php echo $discount; ?>%</div>
+                    <?php } ?>
                   </div>
                   <div class="product-details">
                     <h6><?php echo $product['name']; ?></h6>
                     <div class="price-section">
-                      <span class="original-price"><?php $product['sale_price'] ? 'Rs.' . $product['regular_price'] : ''; ?></span>
-                      <span class="sale-price"><?php echo $product['sale_price'] ? 'Rs.' . $product['sale_price'] : 'Rs.' . $product['price']; ?></span>
+                      <span class="original-price"><?php echo $product['on_sale'] ? 'Rs.' . number_format($product['regular_price']) : ''; ?></span>
+                      <span class="sale-price"><?php echo $product['on_sale'] ? 'Rs.' . number_format($product['sale_price']) : 'Rs.' . number_format($product['price']); ?></span>
                     </div>
                     <div class="rating-stars">
                       <i class="bi bi-star-fill"></i>
