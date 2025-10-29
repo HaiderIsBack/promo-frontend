@@ -34,6 +34,16 @@ if (count($ids) > 0) {
   }
 }
 
+$subtotal = 0;
+
+foreach($products as $product) {
+  if ($product['price']) {
+    $subtotal += (int) $product['price'] * $product['cart_quantity'];
+  }
+}
+
+$tax = max(floor($subtotal * 0.01), 0);
+
 ?>
 
 <!DOCTYPE html>
@@ -189,9 +199,9 @@ if (count($ids) > 0) {
                     <button class="btn btn-outline-heading me-2">
                       <i class="bi bi-arrow-clockwise"></i> Update Cart
                     </button>
-                    <button class="btn btn-outline-remove">
+                    <a href="./controllers/clear_cart.php" class="btn btn-outline-remove">
                       <i class="bi bi-trash"></i> Clear Cart
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -204,7 +214,7 @@ if (count($ids) > 0) {
 
               <div class="summary-item">
                 <span class="summary-label">Subtotal</span>
-                <span class="summary-value">$269.96</span>
+                <span class="summary-value">Rs.<?php echo number_format($subtotal); ?></span>
               </div>
 
               <div class="summary-item shipping-item">
@@ -213,19 +223,19 @@ if (count($ids) > 0) {
                   <div class="form-check text-end">
                     <input class="form-check-input" type="radio" name="shipping" id="standard" checked="">
                     <label class="form-check-label" for="standard">
-                      Standard Delivery - $4.99
+                      Standard Delivery - Rs.300
                     </label>
                   </div>
                   <div class="form-check text-end">
                     <input class="form-check-input" type="radio" name="shipping" id="express">
                     <label class="form-check-label" for="express">
-                      Express Delivery - $12.99
+                      Express Delivery - Rs.900
                     </label>
                   </div>
                   <div class="form-check text-end">
                     <input class="form-check-input" type="radio" name="shipping" id="free">
                     <label class="form-check-label" for="free">
-                      Free Shipping (Orders over $300)
+                      Free Shipping (Over Rs.2,000)
                     </label>
                   </div>
                 </div>
@@ -233,21 +243,21 @@ if (count($ids) > 0) {
 
               <div class="summary-item">
                 <span class="summary-label">Tax</span>
-                <span class="summary-value">$27.00</span>
+                <span class="summary-value">Rs.<?php echo number_format($tax); ?></span>
               </div>
 
               <div class="summary-item discount">
                 <span class="summary-label">Discount</span>
-                <span class="summary-value">-$0.00</span>
+                <span class="summary-value">-Rs.0</span>
               </div>
 
               <div class="summary-total">
                 <span class="summary-label">Total</span>
-                <span class="summary-value">$301.95</span>
+                <span class="summary-value">Rs.<?php echo number_format($subtotal + $tax); ?></span>
               </div>
 
               <div class="checkout-button">
-                <a href="#" class="btn btn-accent w-100">
+                <a href="checkout.php" class="btn btn-accent w-100">
                   Proceed to Checkout <i class="bi bi-arrow-right"></i>
                 </a>
               </div>

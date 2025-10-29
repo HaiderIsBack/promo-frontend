@@ -22,17 +22,23 @@ class Woo_Fetch {
     }
 
     function request($method, $endpoint, $params = [], $body = null) {
-        $params = array_merge($params, [
-            'consumer_key'    => $this->ck,
-            'consumer_secret' => $this->cs
-        ]);
+        // $params = array_merge($params, [
+        //     'consumer_key'    => $this->ck,
+        //     'consumer_secret' => $this->cs
+        // ]);
 
         $url = rtrim($this->store, '/') . '/' . ltrim($endpoint, '/');
-        $url .= '?' . http_build_query($params);
+
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params);
+        }
 
         curl_setopt($this->ch, CURLOPT_URL, $url);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $method);
+
+        // secure auth
+        curl_setopt($this->ch, CURLOPT_USERPWD, "{$this->ck}:{$this->cs}");
 
         if ($body) {
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($body));
@@ -76,7 +82,7 @@ const CONSUMER_KEY = "ck_cdf73c66628cad7706d9cc63c9c1e94321972f42";
 const CONSUMER_SECRET = "cs_47352918dcdc3dae091c00fcab0c35bedbb387e2";
 
 const SITE_URL = '/php_lab'; // for Development
-// $SITE_URL = ''; // for Live
+// const SITE_URL = ''; // for Live
 
 function verify_user_token() {
     if (empty($_SESSION['token'])) {
@@ -111,4 +117,28 @@ function verify_user_token() {
 
     unset($_SESSION['token']);
     return false;
+}
+
+function get_current_url() {
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";
+    $host = $_SERVER['HTTP_HOST'];
+    $requestUri = $_SERVER['REQUEST_URI'];
+
+    $currentUrl = $protocol . $host . $requestUri;
+
+    return $currentUrl;
+}
+
+function get_cart_count() {
+    if (isset($_SESSION['cart'])) {
+        $cart_items_count = 0;
+        foreach($_SESSION['cart'] as &$item) {
+            $cart_items_count += (int) $item['quantity'];
+        }
+        unset($item);
+
+        return $cart_items_count;
+    } else {
+        return '0';
+    }
 }

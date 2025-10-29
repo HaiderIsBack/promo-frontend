@@ -7,6 +7,8 @@ if (verify_user_token()) {
   die();
 }
 
+$error_message = '';
+
 if (isset($_POST['login-submit'])) {
   $username = $_POST['username'];
   $password = $_POST['password'];
@@ -21,24 +23,40 @@ if (isset($_POST['login-submit'])) {
         'http' => array(
             'header' => "Content-type: application/json\r\n",
             'method' => 'POST',
-            'content' => json_encode($data)
+            'content' => json_encode($data),
+            'ignore_errors' => true
         )
     );
 
-    $context = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
+    try {
+      $context = stream_context_create($options);
+      $result = file_get_contents($url, false, $context);
 
-    $result = json_decode($result, true);
+      $result = json_decode($result, true);
 
-    if ($result && !$result['error']) {
-        $_SESSION['token'] = $result['token'];
-        $_SESSION['user_email'] = $result['user_email'];
+      if ($result && isset($result['token'])) {
+          $_SESSION['token'] = $result['token'];
+          $_SESSION['user_email'] = $result['user_email'];
 
-        $_SESSION['toast'] = json_encode(['type' => 'success', 'message' => 'You have successfully Logged In!']);
-        header("Location: " . SITE_URL . "/index.php");
-        die();
-    } else {
-        echo $result['error'];
+          $_SESSION['toast'] = json_encode(['type' => 'success', 'message' => 'You have successfully Logged In!']);
+
+          $redirect = isset($_POST['redirect-url']) ? urldecode($_POST['redirect-url']) : null;
+          
+          if (! is_null($redirect)) {
+            if (strpos($redirect, SITE_URL) === 0 || str_starts_with($redirect, '/')) {
+              header("Location: " . $redirect);
+            } else {
+              header("Location: " . SITE_URL . "/index.php");
+            }
+          } else {
+            header("Location: " . SITE_URL . "/index.php");
+          }
+          die();
+      } else {
+        $error_message = $result['message'];
+      }
+    } catch (Exception $e) {
+      echo "Error: " . $e->getMessage();
     }
   }
 }
@@ -113,7 +131,7 @@ if (isset($_POST['login-submit'])) {
         <h1 class="mb-2 mb-lg-0">Login</h1>
         <nav class="breadcrumbs">
           <ol>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="index.php">Home</a></li>
             <li class="current">Login</li>
           </ol>
         </nav>
@@ -161,6 +179,19 @@ if (isset($_POST['login-submit'])) {
                     </div>
                     <a href="#" class="forgot-password">Forgot password?</a>
                   </div>
+
+                  <?php
+                  if (isset($_GET['redirect_url'])) {
+                    echo "<input type='hidden' name='redirect-url' value='". urlencode($_GET['redirect_url']) ."' />";
+                  }
+                  ?>
+
+                  <?php
+                  if (!empty($error_message)) {
+                    $error_message = preg_replace('/<a\b[^>]*>(.*?)<\/a>/i', '', $error_message);
+                    echo "<p style='color: crimson;'>$error_message</p>";
+                  }
+                  ?>
 
                   <button type="submit" name="login-submit" class="auth-btn primary-btn mb-3">
                     Sign In
@@ -421,6 +452,20 @@ if (isset($_POST['login-submit'])) {
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script>
+    const passwordToggleBtn = document.querySelector(".password-toggle");
+
+    passwordToggleBtn.addEventListener("click", (e) => {
+      const inputEl = passwordToggleBtn.parentNode.querySelector("input");
+      
+      if (inputEl.type === "password") {
+        inputEl.type = "text";
+      } else {
+        inputEl.type = "password";
+      }
+    });
+  </script>
 
 </body>
 

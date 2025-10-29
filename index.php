@@ -73,11 +73,12 @@ if ($result['success']) {
   <main class="main">
     <?php
     if (isset($_SESSION['toast'])) {
+      $toastType = json_decode($_SESSION['toast'], true)['type'];
       $toastMessage = json_decode($_SESSION['toast'], true)['message'];
       echo "<script>
         $(document).ready(function() {
             toastr.options.positionClass = 'toast-bottom-right';
-            toastr.success('$toastMessage');
+            toastr.$toastType('$toastMessage');
         });
       </script>";
       unset($_SESSION['toast']);
@@ -143,19 +144,7 @@ if ($result['success']) {
             <div class="floating-icon cart" data-aos="fade-up" data-aos-delay="600">
               <i class="bi bi-cart3"></i>
               <span class="notification-dot">
-                <?php
-                  if (isset($_SESSION['cart'])) {
-                    $cart_items_count = 0;
-                    foreach($_SESSION['cart'] as &$item) {
-                        $cart_items_count += (int) $item['quantity'];
-                    }
-                    unset($item);
-
-                    echo $cart_items_count;
-                  } else {
-                    echo '0';
-                  }
-                ?>
+                <?php echo get_cart_count(); ?>
               </span>
             </div>
             <div class="floating-icon wishlist" data-aos="fade-up" data-aos-delay="700">
@@ -170,7 +159,7 @@ if ($result['success']) {
 
     </section><!-- /Hero Section -->
 
-    <!-- Promo Cards Section -->
+    <!-- Promo Cards Section 
     <section id="promo-cards" class="promo-cards section">
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-4">
@@ -251,10 +240,10 @@ if ($result['success']) {
         </div>
 
       </div>
-    </section><!-- /Promo Cards Section -->
+    </section>/Promo Cards Section -->
 
     <!-- Best Sellers Section -->
-    <section id="best-sellers" class="best-sellers section">
+    <section id="best-sellers" class="best-sellers section" style="display: none;">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up" id="products">
@@ -444,7 +433,7 @@ if ($result['success']) {
 
       </div>
 
-    </section><!-- /Best Sellers Section -->
+    </section>
 
     <!-- Cards Section -->
     <section id="cards" class="cards section">

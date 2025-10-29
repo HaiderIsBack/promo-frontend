@@ -49,6 +49,7 @@ if (is_null($product)) {
   <link href="assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/drift-zoom/drift-basic.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
@@ -232,7 +233,7 @@ if (is_null($product)) {
                     <i class="bi bi-bag-plus"></i>
                     Add to Cart
                   </button>
-                  <button class="btn secondary-action">
+                  <button class="btn secondary-action" id="buy-now-btn">
                     <i class="bi bi-lightning"></i>
                     Buy Now
                   </button>
@@ -752,6 +753,10 @@ if (is_null($product)) {
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
 
+   <!-- Vendor JS Files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
   <script>
     const addToCartBtn = document.getElementById("add-to-cart-btn");
 
@@ -774,7 +779,35 @@ if (is_null($product)) {
 
         cartBadges.forEach(badge => {
           badge.textContent = data.cartCount;
-        })
+        });
+
+        toastr.options.positionClass = 'toast-bottom-right';
+        toastr.success(`${parseInt(qty.value) > 1 ? 'Items' : 'Item'} have been added to your cart`);
+      }
+    });
+
+    const buyNowBtn = document.getElementById("buy-now-btn");
+
+    buyNowBtn.addEventListener("click", async () => {
+      const response = await fetch("./controllers/add_to_cart.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({productId: <?php echo $product['id']; ?>, quantity: 1})
+      });
+
+      const data = await response.json();
+
+      
+      if (data.success) {
+        const cartBadges = document.querySelectorAll('.cart-count-badge');
+
+        cartBadges.forEach(badge => {
+          badge.textContent = data.cartCount;
+        });
+
+        window.location.href = "<?php echo SITE_URL; ?>/checkout.php";
       }
     });
   </script>

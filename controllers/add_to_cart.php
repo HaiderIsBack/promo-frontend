@@ -19,7 +19,7 @@ if (!empty($data['productId']) && !empty($data['quantity']) && $data['quantity']
     $found = false;
     
     foreach ($_SESSION['cart'] as &$item) {
-        if ($item['id'] === $productId) {
+        if ($item['product_id'] === $productId) {
             $item['quantity'] += $quantity;
             $found = true;
             break;
@@ -29,7 +29,7 @@ if (!empty($data['productId']) && !empty($data['quantity']) && $data['quantity']
 
     if (!$found) {
         $_SESSION['cart'][] = [
-            'id' => $productId,
+            'product_id' => $productId,
             'quantity' => $quantity
         ];
     }

@@ -2,6 +2,11 @@
 
 require_once "./global.php";
 
+if (verify_user_token()) {
+  header('Location: '. SITE_URL . '/index.php');
+  die();
+}
+
 if (isset($_POST['register-submit'])) {
   $username = $_POST['username'];
   $email = $_POST['email'];
